@@ -1,0 +1,15 @@
+body {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.title {
+	background-color: #1690FF;
+	text-align: center;
+	color: white;
+}
+
+p.date {
+	font-variant: small-caps;
+	font-style: italic;
+	font-size: 12px;
+}
