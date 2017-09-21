@@ -3,25 +3,89 @@
   <head>
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
+    <script src="underscore.js"></script>
+    <link rel="stylesheet" type="text/css" href="stylesheet.css">
   </head>
   <body>
     <script>
 
       $(document).ready(function(){
         var $body = $('body');
-        $body.html('');
+        // $body.html('');
 
+        // var index = streams.home.length - 1;
+        // while(index >= 0){
+        //   var tweet = streams.home[index];
+        //   var $tweet = $('<div></div>');
+        //   $tweet.text('@' + tweet.user + ': ' + tweet.message);
+        //   $tweet.appendTo($body);
+        //   index -= 1;
+        // }
+        
         var index = streams.home.length - 1;
         while(index >= 0){
+          var $tweetBody = $('<div class="tweet"></div>');
+          var $userHist = $('<div class="userHist"></div>')
           var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
+          var user = tweet.user;
+          var message = tweet.message;
+          var date = tweet.created_at;
+          var userHist = streams.users[user];
+
+          // Populate user history
+          _.each(userHist, function(histItem){
+            var itemDate = histItem.created_at;
+            var itemMsg = histItem.message;
+            var $itemHist = $('<p class="hist"></p>');
+            $itemHist.text(itemMsg + itemDate);
+            $itemHist.appendTo($userHist);
+          });
+
+          // Show user names
+          var $user = $('<a href="#" class="user"></a>');
+          $user.text(user);
+          $user.appendTo($tweetBody);
+          $userHist.appendTo($tweetBody);
+          $userHist.hide();
+
+          // Show messages
+          var $msg = $('<p class="message"></p>');
+          $msg.text(message);
+          $msg.appendTo($tweetBody);
+
+          // Show timestamp
+          var $date = $('<p class="date"></p>');
+          $date.text(date);
+          $date.appendTo($tweetBody);
+
+          $tweetBody.appendTo($body);
           index -= 1;
         }
+
+        $('.user').on('click', function(event) {
+          event.stopPropagation();
+          $(this).closest('.tweet').find('.userHist').toggle();
+        });
+
+        // document.addEventListener("scheduleNextTweet", function() {
+        //   alert('New tweets are available');
+        // });
 
       });
 
     </script>
+
+    <div class="title">
+      <h2>Twittler</h2>
+    </div>
+
+
   </body>
 </html>
+
+
+<!-- Bare Min Requirements -->
+<!-- Show the user new tweets somehow. (You can show them automatically as they're created, or create a button that displays new tweets.) -->
+<!-- *DONE* Display the timestamps of when the tweets were created. This timestamp should reflect the actual time the tweets were created, and should not just be hardcoded. -->
+<!-- Design your interface so that you want to look at and use the product you're making. -->
+<!-- *DONE* Allow the user to click on a username to see that user's timeline. -->
