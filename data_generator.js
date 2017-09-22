@@ -53,6 +53,8 @@ for(var i = 0; i < 10; i++){
 var scheduleNextTweet = function(){
   generateRandomTweet();
   setTimeout(scheduleNextTweet, Math.random() * 1500);
+  var event = new Event("nextTweet");
+  document.dispatchEvent(event);
 };
 scheduleNextTweet();
 
