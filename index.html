@@ -62,30 +62,47 @@
           index -= 1;
         }
 
+        // Show user history onclick
         $('.user').on('click', function(event) {
           event.stopPropagation();
           $(this).closest('.tweet').find('.userHist').toggle();
         });
 
-        // document.addEventListener("scheduleNextTweet", function() {
-        //   alert('New tweets are available');
-        // });
+        document.addEventListener('nextTweet', function() {
+          // Click button to load new tweets
+          var refresh = $(this).find('.tweetRefreshBtn');
+          refresh.on('click', function() {
+            window.location.reload(false);
+          });
+        });
+
+        var refresh = $(this).find('.tweetRefreshBtn');
+        refresh.on('mouseenter', function() {
+          refresh.addClass('highlight');
+        });
+        refresh.on('mouseleave', function() {
+          refresh.removeClass('highlight');
+        });
 
       });
 
     </script>
 
-    <div class="title">
-      <h2>Twittler</h2>
+    <div class="group">
+      <div class="title">
+        <h2>Twittler</h2>
+      </div>
+      <br/>
+      <br/>
+      <button class="tweetRefreshBtn group">Click for new Tweets!</button>
     </div>
-
 
   </body>
 </html>
 
 
 <!-- Bare Min Requirements -->
-<!-- Show the user new tweets somehow. (You can show them automatically as they're created, or create a button that displays new tweets.) -->
+<!-- *DONE* Show the user new tweets somehow. (You can show them automatically as they're created, or create a button that displays new tweets.) -->
 <!-- *DONE* Display the timestamps of when the tweets were created. This timestamp should reflect the actual time the tweets were created, and should not just be hardcoded. -->
 <!-- Design your interface so that you want to look at and use the product you're making. -->
 <!-- *DONE* Allow the user to click on a username to see that user's timeline. -->
