@@ -41,7 +41,6 @@ p.date {
 	padding: 5px;
 	margin: 5px;
 	float: left;
-	height: 45%;
 	width: 45%;
 }
 
@@ -53,4 +52,17 @@ p.date {
 
 .hist {
 	color: #AAA;
+}
+
+.history {
+	position: relative;
+}
+
+.exitBtn {
+	border-radius: 10px;
+	background: white;
+	border: 2px solid #000;
+	position: absolute;
+	top: 0px;
+	right: 0px;
 }
