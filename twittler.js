@@ -1,11 +1,12 @@
 $(document).ready(function() {
     var $body = $('body');
     var $tweetBody = $('.tweet-body');
+    var $index = 0;
 
-    var index = streams.home.length - 1;
-    while (index >= 0) {
+
+    function showTweet() {
       var $tweet = $('<div class="tweet"></div>');
-      var tweet = streams.home[index];
+      var tweet = streams.home[$index];
       var user = tweet.user;
       var message = tweet.message;
       var date = tweet.created_at;
@@ -25,53 +26,66 @@ $(document).ready(function() {
       $date.text(date);
       $date.appendTo($tweet);
 
-      $tweet.appendTo($tweetBody);
+      $tweet.prependTo($tweetBody);
 
-      index -= 1;
+      $index++;
+
+      showHistory();
     }
-
-    // Create history for all users
-    for (user in streams.users) {
-      var $userHist = $('<div class="userHist ' + user + '"></div>');
-      var tweetHistArray = streams.users[user];
-      var $name = $('<h4>' + user + '</h4>');
-      $name.appendTo($userHist);
-      _.each(tweetHistArray, function(histItem) {
-          var itemDate = histItem.created_at;
-          var itemMsg = histItem.message;
-          var $itemHist = $('<p class="hist"></p>');
-          $itemHist.text(itemMsg + ' ' + itemDate);
-          $itemHist.appendTo($userHist);
-      });
-      // Exit history btn
-      var exit = $('<button class="exitBtn">x</button>');
-      exit.appendTo($userHist).hide();
-      $userHist.appendTo($body);
-    }
-
-    var $history = $('.history');
-    $('.userHist').appendTo($history).hide();
-
+    
     // Show user history onclick
-    $('.tweet').click(function(event) {
-        event.stopPropagation();
-        var $group = $(this).parents('.group');
-        $group.find('.userHist').hide();
-        var name = $(this).find('.user').text();
-        $group.find('.' + name).toggle();
-        $group.find('.exitBtn').show();
-    });
+    function showHistory() {
+      var $histDiv = $('.history');
+      $('.tweet').click(function() {
+          $histDiv.show();
+          var name = $(this).find('.user').text();
+          var tweetHistArray = streams.users[name];
 
-    $('.exitBtn').click(function() {
-      $(this).closest('.userHist').hide();
-      $(this).hide();
-    })
+          var $userHist = $('<div class="userHist ' + name + '"></div>');
+          var $name = $('<h3>' + name + '\'s Twittler</h3>');
+          $name.appendTo($userHist);
+          var $tweetHist = $('<div class="tweetHist"></div>');
+          _.each(tweetHistArray, function(histItem) {
+            var user = histItem.user;
+            var message = histItem.message;
+            var date = histItem.created_at;
+            var $itemHist = $('<p class="tweet"></p>');
+
+            // Show user names
+            var $user = $('<a href="#" class="user"></a>');
+            $user.text(user);
+            $user.appendTo($itemHist);
+
+            // Show messages
+            var $msg = $('<p class="message"></p>');
+            $msg.text(message);
+            $msg.appendTo($itemHist);
+
+            // Show timestamp
+            var $date = $('<p class="date"></p>');
+            $date.text(date);
+            $date.appendTo($itemHist);
+
+            $itemHist.appendTo($tweetHist);
+          });
+          $tweetHist.appendTo($userHist);
+          $histDiv.html($userHist);
+          $('<hr/>').appendTo($histDiv);
+          // Create exit history btn
+          var exit = $('<button class="exitBtn">x</button>');
+          exit.appendTo($histDiv);
+
+        $('.exitBtn').click(function() {
+          $(this).closest('.history').hide();
+        });
+      });
+    }
 
     document.addEventListener('nextTweet', function() {
         // Click button to load new tweets
         var refresh = $(this).find('.tweetRefreshBtn');
         refresh.on('click', function() {
-            window.location.reload(false);
+            showTweet();
         });
     });
 
@@ -83,5 +97,7 @@ $(document).ready(function() {
     refresh.on('mouseleave', function() {
         refresh.removeClass('highlight');
     });
+
+
 
 });
